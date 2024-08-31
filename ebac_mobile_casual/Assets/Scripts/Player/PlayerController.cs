@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ebac.Core.Singleton;
+using TMPro;
+using DG.Tweening;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     [Header("Lerp")]
     public Transform alvo;
@@ -15,9 +18,24 @@ public class PlayerController : MonoBehaviour
     public string tagEndLine = "EndLine";
 
     public GameObject endScreen;
+    public bool invencible;
+
+    [Header("Texto")]
+    public TextMeshPro uiTextoPowerUp;
 
     private bool _canRun;
     private Vector3 _pos;
+    private float _currentSpeed;
+    private Vector3 _startPosition;
+
+    [Header("Coin Setup")]
+    public GameObject coinCollector;
+
+    private void Start()
+    {
+        _startPosition = transform.position;
+        ResetSpeed();
+    }
 
     // Update is called once per frame
     void Update()
@@ -28,20 +46,23 @@ public class PlayerController : MonoBehaviour
         _pos.y = transform.position.y;
         _pos.z = transform.position.z;
         transform.position = Vector3.Lerp(transform.position, _pos, lerpVelocidade * Time.deltaTime);
-        transform.Translate(transform.forward * velocidade * Time.deltaTime);
+        transform.Translate(transform.forward * _currentSpeed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag(tagToCheck))
         {
-            EndGame();
+            if (!invencible) EndGame();
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(tagEndLine)) EndGame();
+        if (other.CompareTag(tagEndLine))
+        {
+            if (!invencible) EndGame();
+        }
     }
 
     private void EndGame()
@@ -54,4 +75,54 @@ public class PlayerController : MonoBehaviour
     {
         _canRun = true;
     }
+
+    #region PowerUpSpeedUp
+    public void SetPowerUpText(string s)
+    {
+        uiTextoPowerUp.text = s;
+    }
+    public void PowerUpSpeedUp(float f)
+    {
+        _currentSpeed = f;
+    }
+    public void ResetSpeed()
+    {
+        _currentSpeed = velocidade;
+    }
+    #endregion
+
+    #region Invencibilidade
+    public void SetInvencible(bool b = true)
+    {
+        invencible = b;
+    }
+    #endregion
+
+    #region ChangeHeight
+    public void ChangeHeight(float amount, float duration, float animationDuration, Ease ease)
+    {
+        //var p = transform.position;
+        //p.y = _startPosition.y + amount;
+        //transform.position = p;
+        transform.DOMoveY(_startPosition.y + amount, animationDuration).SetEase(ease);//.OnComplete(ResetHeight);a
+        SetPowerUpText("VÔO!");
+        Invoke(nameof(ResetHeight), duration);
+    }
+
+    public void ResetHeight()
+    {
+        //var p = transform.position;
+        //p.y = _startPosition.y;
+        //transform.position = p;
+        SetPowerUpText("");
+        transform.DOMoveY(_startPosition.y, .5f);
+    }
+    #endregion
+
+    #region Coins
+    public void ChangeCoinCollectorSize(float amount)
+    {
+        coinCollector.transform.localScale = Vector3.one * amount;
+    }
+    #endregion  
 }
