@@ -35,6 +35,8 @@ public class PlayerController : Singleton<PlayerController>
     [Header("Animation")]
     public AnimatorManager animatorManager;
 
+    [SerializeField] private BounceHelper _bounceHelper;
+
     private void Start()
     {
         _startPosition = transform.position;
@@ -51,6 +53,11 @@ public class PlayerController : Singleton<PlayerController>
         _pos.z = transform.position.z;
         transform.position = Vector3.Lerp(transform.position, _pos, lerpVelocidade * Time.deltaTime);
         transform.Translate(transform.forward * _currentSpeed * Time.deltaTime);
+    }
+
+    public void Bounce()
+    {
+        _bounceHelper.Bounce();
     }
 
     private void OnCollisionEnter(Collision collision)
