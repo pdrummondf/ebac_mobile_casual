@@ -343,6 +343,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PFB_Coin (221)
       objectReference: {fileID: 0}
+    - target: {fileID: 1782004598023615901, guid: aa6be4fa148df4f409ddcd72907a050b, type: 3}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1782004599752881689, guid: aa6be4fa148df4f409ddcd72907a050b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa6be4fa148df4f409ddcd72907a050b, type: 3}
 --- !u!4 &2155702760040025536 stripped
