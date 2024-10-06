@@ -44,7 +44,10 @@ public class CoinsAnimatorManager : Singleton<CoinsAnimatorManager>
     {
         foreach (var item in itens)
         {
-            item.transform.localScale = Vector3.zero;
+            if (item != null)
+            {
+                item.transform.localScale = Vector3.zero;
+            }
         }
 
         Sort();
@@ -61,5 +64,10 @@ public class CoinsAnimatorManager : Singleton<CoinsAnimatorManager>
     private void Sort()
     {
         itens = itens.OrderBy( x => Vector3.Distance(this.transform.position, x.transform.position)).ToList();
+    }
+
+    public void LimparLista() 
+    {
+        itens.Clear();
     }
 }

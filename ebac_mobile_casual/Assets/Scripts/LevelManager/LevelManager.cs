@@ -166,6 +166,7 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
             //SpawnNextLevel();
+            CoinsAnimatorManager.Instance.LimparLista();
             CreateLevelPieces();
         }
     }
